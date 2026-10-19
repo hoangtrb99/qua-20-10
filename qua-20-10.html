@@ -42,7 +42,7 @@ body.night .sky{opacity:1}
   opacity:0;visibility:hidden;transform:scale(1.04);
   transition:opacity .8s,transform .8s,visibility 0s .8s}
 .screen.active{opacity:1;visibility:visible;transform:none;transition:opacity .8s,transform .8s}
-.screen.active > *{animation:rise .9s cubic-bezier(.2,.8,.2,1) both}
+.screen.active > *{animation:rise .9s cubic-bezier(.2,.8,.2,1) backwards}
 .screen.active > *:nth-child(2){animation-delay:.15s}
 .screen.active > *:nth-child(3){animation-delay:.3s}
 .screen.active > *:nth-child(4){animation-delay:.45s}
@@ -85,19 +85,40 @@ h1{font-size:clamp(38px,10vw,64px);line-height:1.15;text-shadow:0 0 28px rgba(25
   background:radial-gradient(circle,rgba(255,236,170,.95) 0%,rgba(255,190,120,.45) 30%,transparent 70%)}
 .stage.open .beam{opacity:1;transform:translate(-50%,-50%) scale(3)}
 .gift{position:relative;width:180px;height:180px;background:none;border:0;cursor:pointer;
-  animation:wiggle 2.6s ease-in-out infinite;-webkit-tap-highlight-color:transparent;filter:drop-shadow(0 0 30px rgba(255,120,170,.45))}
+  animation:wiggle 2.6s ease-in-out infinite;-webkit-tap-highlight-color:transparent;filter:drop-shadow(0 0 30px rgba(255,140,80,.45))}
 @keyframes wiggle{0%,70%,100%{transform:rotate(0)}75%{transform:rotate(-6deg)}80%{transform:rotate(6deg)}85%{transform:rotate(-4deg)}90%{transform:rotate(3deg)}}
 .box{position:absolute;left:12px;right:12px;bottom:0;height:122px;border-radius:12px;
-  background:linear-gradient(135deg,#ff86ab,#e23f76);box-shadow:inset 0 -14px 22px rgba(0,0,0,.18),inset 0 8px 14px rgba(255,255,255,.18)}
+  background:linear-gradient(135deg,#ff7a45,#e8471f);box-shadow:inset 0 -14px 22px rgba(0,0,0,.18),inset 0 8px 14px rgba(255,255,255,.18)}
 .box::before,.lid::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:28px;transform:translateX(-50%);
-  background:linear-gradient(90deg,#e8a93e,#ffe7a3,#e8a93e)}
+  background:repeating-linear-gradient(-45deg,rgba(255,236,200,.75) 0 6px,rgba(255,225,180,.55) 6px 12px)}
 .lid{position:absolute;left:0;right:0;bottom:114px;height:42px;border-radius:9px;z-index:2;
-  background:linear-gradient(135deg,#ff9bbb,#f0588a);box-shadow:0 6px 14px rgba(0,0,0,.2);
+  background:linear-gradient(135deg,#ff8a5c,#f05a2a);box-shadow:0 6px 14px rgba(0,0,0,.2);
   transform-origin:15% 100%;transition:transform 1s cubic-bezier(.3,1.5,.5,1),opacity 1s .2s}
 .bow{position:absolute;bottom:38px;width:50px;height:36px;border:10px solid var(--gold);
   border-radius:50% 50% 50% 50%/60% 60% 40% 40%;box-shadow:inset 0 0 6px rgba(0,0,0,.15)}
 .bow.l{right:50%;transform:rotate(-20deg);transform-origin:right bottom}
 .bow.r{left:50%;transform:rotate(20deg);transform-origin:left bottom}
+.label{position:absolute;left:50%;top:52%;z-index:1;transform:translate(-50%,-50%) rotate(-3deg);width:118px;
+  padding:6px 8px;background:#fff;color:#333;border-radius:4px;box-shadow:0 2px 6px rgba(0,0,0,.25);
+  display:flex;flex-direction:column;gap:1px;text-align:left;font:600 9.5px/1.35 var(--sans)}
+.label b{color:#e8471f;font-size:12px}
+.label strong{color:#e8471f}
+.barcode{display:block;height:14px;margin-top:3px;
+  background:repeating-linear-gradient(90deg,#222 0 2px,transparent 2px 3px,#222 3px 4px,transparent 4px 7px)}
+.toast{position:fixed;z-index:15;left:50%;top:calc(12px + env(safe-area-inset-top,0px));width:min(400px,calc(100% - 24px));
+  display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:18px;text-align:left;
+  background:rgba(255,255,255,.94);color:#222;font-size:13.5px;line-height:1.4;box-shadow:0 12px 40px rgba(0,0,0,.35);
+  transform:translate(-50%,-160%);transition:transform .6s cubic-bezier(.3,1.4,.5,1)}
+.toast.show{transform:translate(-50%,0)}
+.t-icon{flex:none;width:38px;height:38px;border-radius:10px;background:#ee4d2d;display:grid;place-items:center;font-size:20px}
+.t-head{display:flex;justify-content:space-between;font-size:12px;color:#777;margin-bottom:2px}
+.t-head b{color:#222}
+.verify{display:none;flex-direction:column;align-items:center;gap:12px;width:min(320px,100%);margin-top:18px}
+.verify.on{display:flex}
+.verify p{font-size:16px;min-height:1.4em}
+.bar{width:100%;height:12px;border-radius:99px;background:rgba(255,255,255,.15);overflow:hidden;box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
+.bar i{display:block;height:100%;width:0;border-radius:inherit;background:linear-gradient(90deg,#ffd27a,#ff4d85);transition:width .55s ease-out}
+.no.turned{background:linear-gradient(135deg,#ff7aa2,var(--rose));box-shadow:0 10px 30px rgba(255,77,133,.45)}
 .gift.open{animation:none}
 .gift.open .lid{transform:translate(-40px,-170px) rotate(-38deg);opacity:0}
 
@@ -132,7 +153,7 @@ h1{font-size:clamp(38px,10vw,64px);line-height:1.15;text-shadow:0 0 28px rgba(25
   -webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;
   filter:drop-shadow(0 0 20px rgba(255,180,200,.7));animation:shine 5s linear infinite}
 @keyframes shine{to{background-position:300% 0}}
-.ticket{position:relative;width:100%;height:220px;border-radius:16px;color:var(--ink);
+.ticket{position:relative;width:100%;height:244px;border-radius:16px;color:var(--ink);
   background:linear-gradient(135deg,#fff7ec,#ffe3ec);
   -webkit-mask:radial-gradient(circle at 0 50%,transparent 14px,#000 15px) left/51% 100% no-repeat,
                radial-gradient(circle at 100% 50%,transparent 14px,#000 15px) right/51% 100% no-repeat;
@@ -148,7 +169,8 @@ h1{font-size:clamp(38px,10vw,64px);line-height:1.15;text-shadow:0 0 28px rgba(25
 .tk-items li{display:flex;gap:10px;align-items:baseline;font-size:15px;font-weight:600;line-height:1.35;color:#8a1f4c}
 .tk-items li span{font-size:18px;flex:none}
 .tk-items small{font-weight:400;opacity:.75}
-.tk-note{font-size:12px;opacity:.7}
+.tk-note{font-size:12px;opacity:.75}
+.tk-cond{font-size:12px;font-style:italic;color:#c2306a;margin-top:-4px}
 #scratch{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:pointer;transition:opacity .9s}
 .tiny{font-size:13px;opacity:.6}
 
@@ -181,6 +203,7 @@ h1{font-size:clamp(38px,10vw,64px);line-height:1.15;text-shadow:0 0 28px rgba(25
 <section class="screen" id="s-ask">
   <h2 class="ask" id="askText"></h2>
   <div class="btns"><button class="btn yes" id="yes">Có</button><button class="btn no" id="no">Không</button></div>
+  <div class="verify" id="verify"><p id="vText"></p><div class="bar"><i id="vBar"></i></div></div>
   <p class="sub" id="askHint"></p>
 </section>
 
@@ -189,10 +212,10 @@ h1{font-size:clamp(38px,10vw,64px);line-height:1.15;text-shadow:0 0 28px rgba(25
   <div class="stage" id="stage">
     <div class="beam"></div>
     <button class="gift" id="gift" aria-label="Mở hộp quà">
-      <div class="lid"><span class="bow l"></span><span class="bow r"></span></div>
-      <div class="box"></div>
+      <div class="lid"></div>
+      <div class="box"><div class="label"><b>⚡ HỎA TỐC</b><span>Người nhận: <span id="recv"></span></span><span>Thu hộ: <strong>0đ</strong></span><i class="barcode"></i></div></div>
     </button>
-    <p class="sub">Chạm vào hộp quà nhé 🎁</p>
+    <p class="sub">Bạn có 1 đơn <b>Shopee Hỏa Tốc 0 đồng</b> 📦<br>Chạm vào để bóc hàng</p>
   </div>
   <article class="letter" id="letter">
     <div class="photos" id="photos"></div>
@@ -200,6 +223,12 @@ h1{font-size:clamp(38px,10vw,64px);line-height:1.15;text-shadow:0 0 28px rgba(25
     <button class="btn next" id="toEnd">Còn một bất ngờ nữa ✨</button>
   </article>
 </section>
+
+<div class="toast" id="toast" aria-live="polite">
+  <div class="t-icon">🛍️</div>
+  <div><p class="t-head"><b>Shopee</b><span>bây giờ</span></p>
+  <p>Đơn Hỏa Tốc đã giao tới tay <span id="toastWho"></span>. Tổng thanh toán: <b>0đ</b> 🎉</p></div>
+</div>
 
 <!-- MÀN 4: kết -->
 <section class="screen" id="s-end">
@@ -209,12 +238,13 @@ h1{font-size:clamp(38px,10vw,64px);line-height:1.15;text-shadow:0 0 28px rgba(25
     <div class="ticket" id="ticket">
       <div class="tk-in">
         <p class="tk-label">PHIẾU QUÀ TẶNG</p>
+        <p class="tk-cond">(trong khả năng)</p>
         <ul class="tk-items">
           <li><span>🍲</span>1 phiếu bữa ăn tiêu chuẩn 3 món</li>
           <li><span>🧹</span>1 phiếu dọn nhà 1 tiếng</li>
-          <li><span>🎁</span><div>1 phiếu yêu cầu <small>(trong khả năng cho phép)</small></div></li>
+          <li><span>🎁</span>1 phiếu yêu cầu</li>
         </ul>
-        <p class="tk-note" id="tkNote"></p>
+        <p class="tk-note"><b>NSX:</b> 20/10/2026 · <b>HSD:</b> 3 tháng<br><span id="tkNote"></span></p>
       </div>
       <canvas id="scratch"></canvas>
     </div>
@@ -253,7 +283,7 @@ const CONFIG = {
       { src: "anh/me7.jpg", cap: "Con thương mẹ nhiều lắm 🥺" }
     ],
     endSub: "Gửi mẹ, người phụ nữ tuyệt vời nhất đời con 💐",
-    voucherNote: "Hạn dùng: mãi mãi · Đưa phiếu này cho con để đổi"
+    voucherNote: "Đưa phiếu này cho con để đổi"
   },
   chi: {
     self: "em", callLow: "chị",
@@ -275,7 +305,7 @@ const CONFIG = {
       { src: "anh/chi6.jpg", cap: "Em thương chị nhiều lắm 🥺" }
     ],
     endSub: "Gửi chị, người chị xinh đẹp và tuyệt vời nhất 💐",
-    voucherNote: "Hạn dùng: mãi mãi · Đưa phiếu này cho em để đổi"
+    voucherNote: "Đưa phiếu này cho em để đổi"
   }
 };
 
@@ -438,25 +468,34 @@ document.querySelectorAll('.choice').forEach(b => b.addEventListener('click', ()
   petalColors = P.petals; petals.forEach(p => p.c = pick(petalColors));
   const c = center(b); sparkles(c.x, c.y, 40, [...P.petals, '#fff']);
   $('#askText').textContent = `Có biết ${P.self} thương ${P.callLow} nhiều lắm không?`;
+  $('#recv').textContent = P.callLow[0].toUpperCase() + P.callLow.slice(1);
+  $('#toastWho').textContent = P.callLow;
   setTimeout(() => go('s-ask'), 500);
 }));
 
 /* ---------- MÀN 2 ---------- */
 const yes = $('#yes'), no = $('#no');
 const NO_TXT = ["Không", "Chắc chưa? 🤨", "Bấm lộn rồi 😝", "Hông có nút này đâu", "Thôi mà~", "Bấm “Có” đi mà 🥺"];
-const HINTS = ["", "Ơ, nút chạy mất rồi 😆", "Nút đó hỏng rồi đó", "Chỉ còn một đáp án thôi", "Nút “Có” to lắm rồi kìa 👉"];
-let escapes = 0, answered = false;
+const HINTS = ["", "Ơ, nút chạy mất rồi 😆", "Nút đó hỏng rồi đó", "Chỉ còn một đáp án thôi", "Nút “Có” to lắm rồi kìa 👉", "Đuổi mệt chưa? 😜"];
+let escapes = 0, answered = false, noTurned = false, yesTaps = 0, lastFlee = 0;
 function flee(e) {
   if (e) e.preventDefault();
   if (answered) return;
+  if (performance.now() - lastFlee < 400) return;
+  if (noTurned) { if (e && e.type === 'click') sayYes(no); return; }
+  lastFlee = performance.now();
   const r = no.getBoundingClientRect();
   if (!no.classList.contains('free')) {
     no.style.left = r.left + 'px'; no.style.top = r.top + 'px';
-    no.classList.add('free'); no.offsetWidth;
+    no.classList.add('free'); document.body.append(no); no.offsetWidth;
   }
   escapes++;
   no.textContent = NO_TXT[Math.min(escapes, NO_TXT.length - 1)];
   $('#askHint').textContent = HINTS[Math.min(escapes, HINTS.length - 1)];
+  if (escapes >= 7) {
+    noTurned = true; no.textContent = 'Có 😌'; no.classList.add('turned');
+    $('#askHint').textContent = 'Giờ cả hai nút đều là “Có” rồi nhé 😌';
+  }
   yes.style.transform = `scale(${Math.min(1 + escapes * .12, 1.7)})`;
   const yc = center(yes), w = no.offsetWidth, h = no.offsetHeight;
   let nx, ny, tries = 0;
@@ -470,19 +509,39 @@ no.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') flee()
 no.addEventListener('pointerdown', flee);
 no.addEventListener('click', flee);
 
-yes.addEventListener('click', () => {
-  if (answered) return; answered = true;
-  const c = center(yes);
-  hearts(c.x, c.y, 100); heartRain(2000);
-  no.style.opacity = 0; no.style.pointerEvents = 'none';
-  $('#askText').textContent = P.yesText; $('#askHint').textContent = '';
-  setTimeout(() => go('s-gift'), 2800);
-});
+yes.addEventListener('click', () => sayYes(yes));
+function sayYes(btn) {
+  if (answered) return;
+  if (btn === yes && yesTaps++ === 0) {
+    yes.textContent = 'Chắc chưa? 🤨';
+    $('#askHint').textContent = 'Bấm lần nữa để xác nhận nha 😏';
+    yes.animate([{ translate: '0 0' }, { translate: '0 -22px' }, { translate: '0 0' }], { duration: 420, easing: 'ease-out' });
+    return;
+  }
+  answered = true;
+  document.querySelector('.btns').style.display = 'none'; no.style.display = 'none';
+  $('#askHint').textContent = '';
+  const steps = [[18, 'Đang quét trái tim… 🔍'], [46, 'Đang đo độ thương…'], [83, 'Cảnh báo: thương nhiều quá mức 😳'], [100, 'Xác minh thành công ✅']];
+  $('#verify').classList.add('on');
+  steps.forEach(([pct, txt], i) => setTimeout(() => { $('#vBar').style.width = pct + '%'; $('#vText').textContent = txt; }, 150 + i * 700));
+  setTimeout(() => {
+    $('#verify').classList.remove('on');
+    const c = center($('#askText'));
+    hearts(c.x, c.y, 100); heartRain(2000);
+    $('#askText').textContent = P.yesText;
+    setTimeout(() => {
+      go('s-gift');
+      setTimeout(() => $('#toast').classList.add('show'), 700);
+      setTimeout(() => $('#toast').classList.remove('show'), 6000);
+    }, 2800);
+  }, 150 + steps.length * 700 + 300);
+}
 
 /* ---------- MÀN 3 ---------- */
 let opened = false, slideTimer = null;
 $('#gift').addEventListener('click', () => {
   if (opened) return; opened = true;
+  $('#toast').classList.remove('show');
   const g = $('#gift'), c = center(g);
   g.classList.add('open'); $('#stage').classList.add('open');
   setTimeout(() => { confetti(c.x, c.y - 30, 160); sparkles(c.x, c.y - 40, 70); }, 220);
