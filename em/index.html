@@ -285,10 +285,25 @@ const CONFIG = {
       "— Anh iu của em"
     ],
     photos: [
-      { src: "", emoji: "💘", cap: "Em là điều tuyệt nhất của anh" },
-      { src: "", emoji: "🌹", cap: "Tặng em một bông hồng" },
-      { src: "", emoji: "🧸", cap: "Cục cưng của anh" },
-      { src: "", emoji: "💌", cap: "Anh thương em nhiều lắm 🥺" }
+      { src: "../anh/em1.jpg", cap: "Lúc em dỗi anh 😤" },
+      { src: "../anh/em2.jpg", cap: "Em và chiếc bánh ú tí hon" },
+      { src: "../anh/em3.jpg", cap: "Em xinh giữa trời xanh" },
+      { src: "../anh/em4.jpg", cap: "Cô gái của biển 🌊" },
+      { src: "../anh/em5.jpg", cap: "Leo núi cùng anh" },
+      { src: "../anh/em6.jpg", cap: "Nụ cười anh thương nhất" },
+      { src: "../anh/em7.jpg", cap: "Đà Lạt có em là ấm" },
+      { src: "../anh/em8.jpg", cap: "Cười tít cả mắt 😆" },
+      { src: "../anh/em9.jpg", cap: "Đi chợ đêm cùng em" },
+      { src: "../anh/em10.jpg", cap: "Lúc em tập trung" },
+      { src: "../anh/em11.jpg", cap: "Em trả giá cực gắt 😎" },
+      { src: "../anh/em12.jpg", cap: "Hoàng hôn cũng không rực bằng em" },
+      { src: "../anh/em13.jpg", cap: "Ngắm hoàng hôn cùng nhau 🌅" },
+      { src: "../anh/em14.jpg", cap: "Hai đứa mình 💑" },
+      { src: "../anh/em15.jpg", cap: "Em là chương đẹp nhất của Đà Lạt" },
+      { src: "../anh/em16.jpg", cap: "Ăn vặt là chân ái 🍿" },
+      { src: "../anh/em17.jpg", cap: "Dưới tán mai anh đào 🌸" },
+      { src: "../anh/em18.jpg", cap: "Em và mùa hoa" },
+      { src: "../anh/em19.jpg", cap: "Mãi rạng rỡ như thế này nhé ✨" }
     ],
     endSub: "Gửi em, người con gái anh thương nhất 💐",
     voucherNote: "Đưa phiếu này cho anh để đổi"
@@ -565,7 +580,7 @@ function showLetter() {
   const slides = [...photos.children]; let cur = 0;
   if (slides.length > 1) slideTimer = setInterval(() => {
     slides[cur].classList.remove('on'); cur = (cur + 1) % slides.length; slides[cur].classList.add('on');
-  }, 2800);
+  }, slides.length > 10 ? 2200 : 2800);
   P.letter.forEach((txt, i) => {
     const p = document.createElement('p');
     p.className = 'line' + (i === 0 ? ' hello' : i === P.letter.length - 1 ? ' sign' : '');

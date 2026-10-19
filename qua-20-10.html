@@ -566,7 +566,7 @@ function showLetter() {
   const slides = [...photos.children]; let cur = 0;
   if (slides.length > 1) slideTimer = setInterval(() => {
     slides[cur].classList.remove('on'); cur = (cur + 1) % slides.length; slides[cur].classList.add('on');
-  }, 2800);
+  }, slides.length > 10 ? 2200 : 2800);
   P.letter.forEach((txt, i) => {
     const p = document.createElement('p');
     p.className = 'line' + (i === 0 ? ' hello' : i === P.letter.length - 1 ? ' sign' : '');
