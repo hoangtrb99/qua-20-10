@@ -15,7 +15,7 @@
   color-scheme:dark;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden}
+html,body{height:100%;overflow:hidden;overscroll-behavior:none}
 body{
   font-family:var(--sans);color:var(--white);
   background:radial-gradient(120% 90% at 50% 10%,#7a2252 0%,var(--bg2) 35%,var(--bg1) 80%);
@@ -132,19 +132,22 @@ h1{font-size:clamp(38px,10vw,64px);line-height:1.15;text-shadow:0 0 28px rgba(25
   -webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;
   filter:drop-shadow(0 0 20px rgba(255,180,200,.7));animation:shine 5s linear infinite}
 @keyframes shine{to{background-position:300% 0}}
-.ticket{position:relative;width:min(340px,100%);height:176px;margin-top:10px;border-radius:16px;color:var(--ink);
+.ticket{position:relative;width:100%;height:220px;border-radius:16px;color:var(--ink);
   background:linear-gradient(135deg,#fff7ec,#ffe3ec);
   -webkit-mask:radial-gradient(circle at 0 50%,transparent 14px,#000 15px) left/51% 100% no-repeat,
                radial-gradient(circle at 100% 50%,transparent 14px,#000 15px) right/51% 100% no-repeat;
           mask:radial-gradient(circle at 0 50%,transparent 14px,#000 15px) left/51% 100% no-repeat,
                radial-gradient(circle at 100% 50%,transparent 14px,#000 15px) right/51% 100% no-repeat;
   box-shadow:0 20px 60px rgba(0,0,0,.4)}
-.ticket-wrap{filter:drop-shadow(0 0 0 transparent);transition:filter 1s}
+.ticket-wrap{width:min(360px,100%);margin-top:6px;filter:drop-shadow(0 0 0 transparent);transition:filter 1s}
 .ticket-wrap.won{filter:drop-shadow(0 0 28px rgba(255,210,120,.85))}
-.tk-in{position:absolute;inset:10px 24px;border:2px dashed rgba(226,63,118,.35);border-radius:12px;
+.tk-in{position:absolute;inset:10px 22px;border:2px dashed rgba(226,63,118,.35);border-radius:12px;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:10px;text-align:center}
 .tk-label{font-size:12px;letter-spacing:.35em;color:#c2306a;font-weight:600}
-.tk-value{font-family:var(--script);font-size:26px;line-height:1.2;color:#8a1f4c}
+.tk-items{list-style:none;display:flex;flex-direction:column;gap:7px;width:100%;text-align:left}
+.tk-items li{display:flex;gap:10px;align-items:baseline;font-size:15px;font-weight:600;line-height:1.35;color:#8a1f4c}
+.tk-items li span{font-size:18px;flex:none}
+.tk-items small{font-weight:400;opacity:.75}
 .tk-note{font-size:12px;opacity:.7}
 #scratch{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:pointer;transition:opacity .9s}
 .tiny{font-size:13px;opacity:.6}
@@ -206,7 +209,11 @@ h1{font-size:clamp(38px,10vw,64px);line-height:1.15;text-shadow:0 0 28px rgba(25
     <div class="ticket" id="ticket">
       <div class="tk-in">
         <p class="tk-label">PHIẾU QUÀ TẶNG</p>
-        <p class="tk-value" id="tkValue"></p>
+        <ul class="tk-items">
+          <li><span>🍲</span>1 phiếu bữa ăn tiêu chuẩn 3 món</li>
+          <li><span>🧹</span>1 phiếu dọn nhà 1 tiếng</li>
+          <li><span>🎁</span><div>1 phiếu yêu cầu <small>(trong khả năng cho phép)</small></div></li>
+        </ul>
         <p class="tk-note" id="tkNote"></p>
       </div>
       <canvas id="scratch"></canvas>
@@ -246,7 +253,7 @@ const CONFIG = {
       { src: "anh/me7.jpg", cap: "Con thương mẹ nhiều lắm 🥺" }
     ],
     endSub: "Gửi mẹ, người phụ nữ tuyệt vời nhất đời con 💐",
-    voucher: { value: "Một chuyến đi chơi cùng con, con lo hết!", note: "Hạn dùng: mãi mãi · Đưa phiếu này cho con để đổi" }
+    voucherNote: "Hạn dùng: mãi mãi · Đưa phiếu này cho con để đổi"
   },
   chi: {
     self: "em", callLow: "chị",
@@ -268,7 +275,7 @@ const CONFIG = {
       { src: "anh/chi6.jpg", cap: "Em thương chị nhiều lắm 🥺" }
     ],
     endSub: "Gửi chị, người chị xinh đẹp và tuyệt vời nhất 💐",
-    voucher: { value: "Một buổi shopping, em bao 💳", note: "Hạn dùng: mãi mãi · Đưa phiếu này cho em để đổi" }
+    voucherNote: "Hạn dùng: mãi mãi · Đưa phiếu này cho em để đổi"
   }
 };
 
@@ -516,8 +523,7 @@ let fwTimer = null;
 $('#toEnd').addEventListener('click', () => {
   clearInterval(slideTimer);
   $('#endSub').textContent = P.endSub;
-  $('#tkValue').textContent = P.voucher.value;
-  $('#tkNote').textContent = P.voucher.note;
+  $('#tkNote').textContent = P.voucherNote;
   document.body.classList.add('night'); petalSpeed = .6; trails = true;
   go('s-end');
   requestAnimationFrame(initScratch);
@@ -530,7 +536,8 @@ $('#s-end').addEventListener('pointerdown', e => {
 });
 
 function initScratch() {
-  const c = $('#scratch'), w = c.offsetWidth, h = c.offsetHeight, x = c.getContext('2d');
+  const c = $('#scratch'), w = c.offsetWidth, h = c.offsetHeight, x = c.getContext('2d', { willReadFrequently: true });
+  ['touchstart', 'touchmove'].forEach(t => c.addEventListener(t, e => e.preventDefault(), { passive: false }));
   c.width = w * dpr; c.height = h * dpr; x.setTransform(dpr, 0, 0, dpr, 0, 0);
   const g = x.createLinearGradient(0, 0, w, h);
   g.addColorStop(0, '#cf9a3c'); g.addColorStop(.45, '#ffeab0'); g.addColorStop(.55, '#f7d27e'); g.addColorStop(1, '#bf8a2c');
@@ -560,7 +567,7 @@ function initScratch() {
     if (done) return;
     const d = x.getImageData(0, 0, c.width, c.height).data; let clear = 0, tot = 0;
     for (let i = 3; i < d.length; i += 160) { tot++; if (d[i] === 0) clear++; }
-    if (clear / tot > .5) { done = true; reveal(); }
+    if (clear / tot > .45) { done = true; reveal(); }
   }
 }
 function reveal() {
